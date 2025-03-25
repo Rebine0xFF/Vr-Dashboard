@@ -8,7 +8,7 @@ class Application(customtkinter.CTk):
         super().__init__()
 
         self.title("VR Dashboard by Rebine")
-        self.geometry("1000x400")
+        self.geometry("1000x500")
 
         self.options_frame = OptionsFrame(self)
         self.options_frame.pack(side="left",
@@ -61,7 +61,7 @@ class OptionsFrame(customtkinter.CTkFrame):
                                              text="Visible HUD",
                                              text_color="white",
                                              font=("Inter", 15, "bold"))
-        self.HUD_label.pack(pady=5, fill="x")
+        self.HUD_label.pack(pady=(5, 10), fill="x")
 
         self.HUD_selection_segmented_button = customtkinter.CTkSegmentedButton(self,
                                                              values=["None", "Performance", "Stereo Debug", "Layer"],
@@ -73,8 +73,14 @@ class OptionsFrame(customtkinter.CTkFrame):
 
         self.HUD_status_label = customtkinter.CTkLabel(self,
                                                        text=f"Current overlay index: {self.HUD_actions_dictionnary[self.HUD_selection_segmented_button._current_value]}",
-                                                       font=("Inter Extra Light", 13))
-        self.HUD_status_label.pack(anchor="w", padx=40, pady=(1, 20))
+                                                       font=("Inter Extra Light", 13),
+                                                       text_color="#A7A7A7")
+        self.HUD_status_label.pack(anchor="w", padx=40, pady=1)
+
+
+        self.separator_line1 = customtkinter.CTkProgressBar(self, height=3, width=330, progress_color="#3D3C3C", fg_color="#3D3C3C")
+        self.separator_line1.pack(pady=10)
+
 
         self.oculus_service_label = customtkinter.CTkLabel(self,
                                              text="Oculus Service",
@@ -124,3 +130,30 @@ class OptionsFrame(customtkinter.CTkFrame):
                                                                    font=("Inter Medium", 14),
                                                                    command=lambda: oculus_service_action_button_callback(action="--RestartService"))
         self.oculus_reload_service_button.pack(side="left", padx=5, pady=5)
+
+
+        self.service_status_frame = customtkinter.CTkFrame(self, fg_color="transparent")
+        self.service_status_frame.pack()
+
+        self.service_fixed_label = customtkinter.CTkLabel(self.service_status_frame,
+                                                       text="Service status: ",
+                                                       font=("Inter Extra Light", 13),
+                                                       text_color="#A7A7A7")
+        self.service_fixed_label.pack(side="left", padx=0, pady=1)
+
+        self.service_dynamic_label = customtkinter.CTkLabel(self.service_status_frame,
+                                                       text="Running",
+                                                       font=("Inter Extra Light", 13),
+                                                       text_color="#5C8D18")
+        self.service_dynamic_label.pack(side="left", padx=0, pady=1)
+
+
+        self.separator_line2 = customtkinter.CTkProgressBar(self, height=3, width=330, progress_color="#3D3C3C", fg_color="#3D3C3C")
+        self.separator_line2.pack(pady=10)
+
+
+        self.shortcut_label = customtkinter.CTkLabel(self,
+                                             text="Shortcuts",
+                                             text_color="white",
+                                             font=("Inter", 15, "bold"))
+        self.shortcut_label.pack(pady=5, fill="x")
