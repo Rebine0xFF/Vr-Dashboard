@@ -1,11 +1,9 @@
 # police Inter
 
 import customtkinter
-import subprocess
-import psutil # pour vérifier si le processus est déjà en cours d'exécution (à faire)
 import os
 
-from admin_check import ensure_admin
+from system_utils import ensure_admin, launch_oculus_client
 from ui import Application
 
 
@@ -13,10 +11,7 @@ from ui import Application
 os.system('cls' if os.name == 'nt' else 'clear') # Clear console
 ensure_admin()
 
-print("App running as admin ✅")
-processus = subprocess.Popen([r"C:\Program Files\Oculus\Support\oculus-client\OculusClient.exe"],
-                                text=True)
-
+launch_oculus_client()
 
 
 root_path = os.path.dirname(os.path.abspath(__file__))
