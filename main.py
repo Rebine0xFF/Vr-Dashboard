@@ -1,7 +1,6 @@
 # police Inter
 
 import customtkinter
-
 import subprocess
 import psutil # pour vérifier si le processus est déjà en cours d'exécution (à faire)
 import os
