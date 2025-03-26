@@ -25,7 +25,7 @@ class OptionsFrame(customtkinter.CTkFrame):
         icons_path = os.path.join(root_path, "imgs", "icons")
 
         def oculus_service_action_button_callback(action):
-            processus = subprocess.Popen([r"C:\Program Files\Oculus\Support\oculus-diagnostics\OculusDebugTool.exe", action],
+            processus = subprocess.Popen(["C:/Program Files/Oculus/Support/oculus-diagnostics/OculusDebugTool.exe", action],
                                          text=True)
 
         def HUD_selection_segmented_button_callback(value):
@@ -38,7 +38,7 @@ class OptionsFrame(customtkinter.CTkFrame):
                 self.HUD_selection_segmented_button.configure(selected_color="#1f6aa5") # default blue color
                 self.HUD_selection_segmented_button.configure(selected_hover_color="#144870")
 
-            processus = subprocess.Popen(r"C:\Program Files\Oculus\Support\oculus-diagnostics\OculusDebugToolCLI.exe",
+            processus = subprocess.Popen("C:/Program Files/Oculus/Support/oculus-diagnostics/OculusDebugToolCLI.exe",
                                          stdin=subprocess.PIPE,
                                          text=True)
             
