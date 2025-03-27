@@ -34,8 +34,10 @@ def launch_oculus_client():
         if not is_process_running("OculusClient.exe"):
             subprocess.Popen(
                 [r"C:\Program Files\Oculus\Support\oculus-client\OculusClient.exe"],
-                text=True
-            )
+                creationflags=0x00000008,   # Independent process
+                stdout=subprocess.DEVNULL,  #
+                stderr=subprocess.DEVNULL,  #
+                text=True)
             print("Oculus Client launched.")
         else:
             print("Oculus Client is already running.")
