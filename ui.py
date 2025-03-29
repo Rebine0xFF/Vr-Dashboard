@@ -3,7 +3,7 @@ from PIL import Image
 import subprocess
 import os
 
-from system_utils import change_overlay
+from system_utils import change_overlay, get_service, manage_service
 
 class Application(customtkinter.CTk):
     def __init__(self):
@@ -28,8 +28,8 @@ class OptionsFrame(customtkinter.CTkFrame):
 
 
         def oculus_service_action_button_callback(action):
-            processus = subprocess.Popen(["C:/Program Files/Oculus/Support/oculus-diagnostics/OculusDebugTool.exe", action],
-                                         text=True)
+            manage_service(action)
+
 
         def HUD_selection_segmented_button_callback(value):
             print(value, "was selected and has the index of", self.HUD_actions_dictionnary[value])
@@ -103,7 +103,7 @@ class OptionsFrame(customtkinter.CTkFrame):
                                                                    text_color="white",
                                                                    image=self.start_icon,
                                                                    font=("Inter Medium", 14),
-                                                                   command=lambda: oculus_service_action_button_callback(action="--StartService"))
+                                                                   command=lambda: oculus_service_action_button_callback(action="start"))
         self.oculus_start_service_button.pack(side="left", padx=5, pady=5)
 
         self.oculus_stop_service_button = customtkinter.CTkButton(self.oculus_service_button_frame,
@@ -115,7 +115,7 @@ class OptionsFrame(customtkinter.CTkFrame):
                                                                    text_color="white",
                                                                    image=self.stop_icon,
                                                                    font=("Inter Medium", 14),
-                                                                   command=lambda: oculus_service_action_button_callback(action="--StopService"))
+                                                                   command=lambda: oculus_service_action_button_callback(action="stop"))
         self.oculus_stop_service_button.pack(side="left", padx=5, pady=5)
 
         self.oculus_reload_service_button = customtkinter.CTkButton(self.oculus_service_button_frame,
@@ -127,7 +127,7 @@ class OptionsFrame(customtkinter.CTkFrame):
                                                                    text_color="white",
                                                                    image=self.reload_icon,
                                                                    font=("Inter Medium", 14),
-                                                                   command=lambda: oculus_service_action_button_callback(action="--RestartService"))
+                                                                   command=lambda: oculus_service_action_button_callback(action="restart"))
         self.oculus_reload_service_button.pack(side="left", padx=5, pady=5)
 
 

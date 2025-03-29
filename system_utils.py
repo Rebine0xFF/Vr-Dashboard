@@ -2,7 +2,7 @@ import subprocess
 import psutil
 import ctypes
 import sys
-
+import time
 
 
 
@@ -51,7 +51,43 @@ def launch_oculus_client():
 def change_overlay(name, index):
     
             processus = subprocess.Popen("C:/Program Files/Oculus/Support/oculus-diagnostics/OculusDebugToolCLI.exe",
-                                         stdin=subprocess.PIPE,
-                                         text=True)
+                                         stdin=subprocess.PIPE,                                          # Set it's mode to the dictionnary value
+                                         text=True)                                                                    # |     |
             processus.communicate(input=f"perfhud set-mode 0\nstereohud set-mode 0\nlayerhud set-mode 0\n{name} set-mode {index}\nexit\n")
-                                        # |                     Reset all huds                          | Get selected hud name from dictionnary |        | Set it's mode to the dictionnary value |
+                                                               # Reset all huds                          |    |
+                                                                                       # Get selected hud name from dictionnary
+
+
+
+service_name = "OVRService"
+
+def get_service():
+
+    service = None
+    try:
+        service = psutil.win_service_get(service_name)
+        service = service.as_dict()
+    except Exception as ex:
+        print(str(ex))
+    return service
+
+
+
+
+def manage_service(action):
+     
+    if action not in ["start", "stop", "restart"]:
+        print("❌ Invalid action ! Use 'start', 'stop' or 'restart'.")
+        return
+    
+    try:
+        if action == "restart":
+            subprocess.run(["net", "stop", service_name], shell=True, check=True)
+            time.sleep(3)  # Délai pour éviter un conflit
+            subprocess.run(["net", "start", service_name], shell=True, check=True)
+            print(f"🔄 {service_name} redémarré avec succès.")
+        else:
+            subprocess.run(["net", action, service_name], shell=True, check=True)
+            print(f"✅ {service_name} {action}é avec succès.")
+    except subprocess.CalledProcessError as e:
+        print(f"❌ Erreur lors de l'exécution de '{action}': {e}")
