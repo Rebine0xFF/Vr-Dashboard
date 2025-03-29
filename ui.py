@@ -28,8 +28,14 @@ class OptionsFrame(customtkinter.CTkFrame):
 
         def oculus_service_action_button_callback(action):
 
-            #self.top_progrees_bar.configure(mode="indeterminate")
-            manage_service(action)
+            self.top_progrees_bar.configure(mode="indeterminate")
+            self.top_progrees_bar.start()
+
+            def on_service_complete():
+                self.top_progrees_bar.stop()
+                self.top_progrees_bar.configure(mode="determinate")
+                
+            manage_service(action, on_complete=on_service_complete)
 
 
         def HUD_selection_segmented_button_callback(value):
@@ -93,7 +99,7 @@ class OptionsFrame(customtkinter.CTkFrame):
 
         self.start_icon = customtkinter.CTkImage(Image.open(icons_path + "/start_icon.png"), size=(40, 40))
         self.stop_icon = customtkinter.CTkImage(Image.open(icons_path + "/stop_icon.png"), size=(40, 40))
-        self.reload_icon = customtkinter.CTkImage(Image.open(icons_path + "/reload_icon.png"), size=(40, 40))
+        self.restart_icon = customtkinter.CTkImage(Image.open(icons_path + "/restart_icon.png"), size=(40, 40))
 
         self.oculus_start_service_button = customtkinter.CTkButton(self.oculus_service_button_frame,
                                                                    text="Start     \nService",
@@ -119,17 +125,17 @@ class OptionsFrame(customtkinter.CTkFrame):
                                                                    command=lambda: oculus_service_action_button_callback(action="stop"))
         self.oculus_stop_service_button.pack(side="left", padx=5, pady=5)
 
-        self.oculus_reload_service_button = customtkinter.CTkButton(self.oculus_service_button_frame,
-                                                                   text="Reload \nService",
+        self.oculus_restart_service_button = customtkinter.CTkButton(self.oculus_service_button_frame,
+                                                                   text="restart \nService",
                                                                    width=1,
                                                                    height=52,
                                                                    fg_color="#5C4634",
                                                                    hover_color=("blue"),
                                                                    text_color="white",
-                                                                   image=self.reload_icon,
+                                                                   image=self.restart_icon,
                                                                    font=("Inter Medium", 14),
                                                                    command=lambda: oculus_service_action_button_callback(action="restart"))
-        self.oculus_reload_service_button.pack(side="left", padx=5, pady=5)
+        self.oculus_restart_service_button.pack(side="left", padx=5, pady=5)
 
 
         self.service_status_frame = customtkinter.CTkFrame(self, fg_color="transparent")

@@ -88,7 +88,7 @@ def run_subprocess(command, shell=False):
         text=True
     )
 
-def manage_service(action):
+def manage_service(action, on_complete=None):
     if action not in ["start", "stop", "restart"]:
         print("❌ Invalid action! Use 'start', 'stop' or 'restart'.")
         return
@@ -97,14 +97,18 @@ def manage_service(action):
         try:
             if action == "restart":
                 run_subprocess(["net", "stop", service_name], shell=True)
-                time.sleep(3)  # Délai pour éviter un conflit
+                time.sleep(3)
                 run_subprocess(["net", "start", service_name], shell=True)
                 print(f"🔄 {service_name} successfully restarted.")
             else:
                 run_subprocess(["net", action, service_name], shell=True)
+                time.sleep(1)
                 print(f"✅ {service_name} {action}ed with success.")
         except Exception as e:
             print(f"❌ Error when executing '{action}': {e}")
+        finally:
+            if on_complete:
+                on_complete()
 
     # Exécuter la tâche dans un thread séparé
     threading.Thread(target=service_task, daemon=True).start()
