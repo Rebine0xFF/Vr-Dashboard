@@ -3,6 +3,8 @@ from PIL import Image
 import subprocess
 import os
 
+from system_utils import change_overlay
+
 class Application(customtkinter.CTk):
     def __init__(self):
         super().__init__()
@@ -24,6 +26,7 @@ class OptionsFrame(customtkinter.CTkFrame):
         root_path = os.path.dirname(os.path.abspath(__file__))
         icons_path = os.path.join(root_path, "imgs", "icons")
 
+
         def oculus_service_action_button_callback(action):
             processus = subprocess.Popen(["C:/Program Files/Oculus/Support/oculus-diagnostics/OculusDebugTool.exe", action],
                                          text=True)
@@ -38,12 +41,8 @@ class OptionsFrame(customtkinter.CTkFrame):
                 self.HUD_selection_segmented_button.configure(selected_color="#1f6aa5") # default blue color
                 self.HUD_selection_segmented_button.configure(selected_hover_color="#144870")
 
-            processus = subprocess.Popen("C:/Program Files/Oculus/Support/oculus-diagnostics/OculusDebugToolCLI.exe",
-                                         stdin=subprocess.PIPE,
-                                         text=True)
-            
-            processus.communicate(input=f"perfhud set-mode 0\nstereohud set-mode 0\nlayerhud set-mode 0\n{self.HUD_actions_dictionnary[value][0]} set-mode {self.HUD_actions_dictionnary[value][1]}\nexit\n")
-                                        # |                     Reset all huds                          | Get selected hud name from dictionnary |        | Set it's mode to the dictionnary value |
+            change_overlay(self.HUD_actions_dictionnary[value][0], self.HUD_actions_dictionnary[value][1])
+
 
         # Dictionnaire associant chaque valeur à une action
         self.HUD_actions_dictionnary = {

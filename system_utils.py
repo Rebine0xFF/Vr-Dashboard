@@ -43,3 +43,15 @@ def launch_oculus_client():
             print("Oculus Client is already running.")
     except Exception as e:
         print(f"Errore launching Oculus Client : {e}")
+
+
+
+
+
+def change_overlay(name, index):
+    
+            processus = subprocess.Popen("C:/Program Files/Oculus/Support/oculus-diagnostics/OculusDebugToolCLI.exe",
+                                         stdin=subprocess.PIPE,
+                                         text=True)
+            processus.communicate(input=f"perfhud set-mode 0\nstereohud set-mode 0\nlayerhud set-mode 0\n{name} set-mode {index}\nexit\n")
+                                        # |                     Reset all huds                          | Get selected hud name from dictionnary |        | Set it's mode to the dictionnary value |
