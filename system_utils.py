@@ -1,9 +1,11 @@
 import subprocess
+import threading
 import psutil
 import ctypes
 import sys
 import time
 
+service_name = "OVRService"
 
 
 def is_admin():
@@ -59,7 +61,6 @@ def change_overlay(name, index):
 
 
 
-service_name = "OVRService"
 
 def get_service():
 
@@ -74,20 +75,36 @@ def get_service():
 
 
 
+def run_subprocess(command, shell=False):
+    """
+    Utility function to run a subprocess with default parameters.
+    """
+    return subprocess.Popen(
+        command,
+        shell=shell,
+        creationflags=0x00000008,  # Independent process
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+        text=True
+    )
+
 def manage_service(action):
-     
     if action not in ["start", "stop", "restart"]:
-        print("❌ Invalid action ! Use 'start', 'stop' or 'restart'.")
+        print("❌ Invalid action! Use 'start', 'stop' or 'restart'.")
         return
-    
-    try:
-        if action == "restart":
-            subprocess.run(["net", "stop", service_name], shell=True, check=True)
-            time.sleep(3)  # Délai pour éviter un conflit
-            subprocess.run(["net", "start", service_name], shell=True, check=True)
-            print(f"🔄 {service_name} redémarré avec succès.")
-        else:
-            subprocess.run(["net", action, service_name], shell=True, check=True)
-            print(f"✅ {service_name} {action}é avec succès.")
-    except subprocess.CalledProcessError as e:
-        print(f"❌ Erreur lors de l'exécution de '{action}': {e}")
+
+    def service_task():
+        try:
+            if action == "restart":
+                run_subprocess(["net", "stop", service_name], shell=True)
+                time.sleep(3)  # Délai pour éviter un conflit
+                run_subprocess(["net", "start", service_name], shell=True)
+                print(f"🔄 {service_name} successfully restarted.")
+            else:
+                run_subprocess(["net", action, service_name], shell=True)
+                print(f"✅ {service_name} {action}ed with success.")
+        except Exception as e:
+            print(f"❌ Error when executing '{action}': {e}")
+
+    # Exécuter la tâche dans un thread séparé
+    threading.Thread(target=service_task, daemon=True).start()

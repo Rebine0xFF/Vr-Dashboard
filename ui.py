@@ -1,6 +1,5 @@
 import customtkinter
 from PIL import Image
-import subprocess
 import os
 
 from system_utils import change_overlay, get_service, manage_service
@@ -28,6 +27,8 @@ class OptionsFrame(customtkinter.CTkFrame):
 
 
         def oculus_service_action_button_callback(action):
+
+            #self.top_progrees_bar.configure(mode="indeterminate")
             manage_service(action)
 
 
