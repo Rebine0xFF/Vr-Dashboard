@@ -16,6 +16,12 @@ class Application(customtkinter.CTk):
                                 pady=20,
                                 padx=20,
                                 fill="y")
+        
+        self.games_frame = GamesFrame(self)
+        self.games_frame.pack(side="right",
+                                pady=20,
+                                padx=20,
+                                fill="y")
 
 
 class OptionsFrame(customtkinter.CTkFrame):
@@ -126,7 +132,7 @@ class OptionsFrame(customtkinter.CTkFrame):
         self.oculus_stop_service_button.pack(side="left", padx=5, pady=5)
 
         self.oculus_restart_service_button = customtkinter.CTkButton(self.oculus_service_button_frame,
-                                                                   text="restart \nService",
+                                                                   text="Restart \nService",
                                                                    width=1,
                                                                    height=52,
                                                                    fg_color="#5C4634",
@@ -163,3 +169,13 @@ class OptionsFrame(customtkinter.CTkFrame):
                                              text_color="white",
                                              font=("Inter", 15, "bold"))
         self.shortcut_label.pack(pady=5, fill="x")
+
+
+
+class GamesFrame(customtkinter.CTkFrame):
+    def __init__(self, parent):
+        super().__init__(parent)
+
+        self.top_progrees_bar = customtkinter.CTkProgressBar(self, height=3)
+        self.top_progrees_bar.pack(fill="x")
+        self.top_progrees_bar.set(1)
